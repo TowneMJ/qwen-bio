@@ -269,7 +269,7 @@ def main():
     print("Starting generation (5 questions per topic)...")
     print("="*50)
     
-    questions = generate_dataset(questions_per_topic=5)
+    questions = generate_dataset(questions_per_topic=1)
     
     if questions:
         # Save raw Q&A format
