@@ -1,0 +1,11 @@
+# Virtual environment
+venv/
+
+# Evaluation harness (can be re-cloned)
+lm-evaluation-harness/
+
+# Model outputs (large)
+outputs/
+
+# Prepared datasets (can be regenerated)
+prepared_data/

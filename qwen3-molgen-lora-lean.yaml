@@ -1,0 +1,66 @@
+# Qwen3-4B Molecular Genetics Fine-tuning Config
+# Memory-optimized for single GPU
+
+base_model: Qwen/Qwen3-4B-Instruct-2507
+
+# Load in 8-bit to reduce memory
+load_in_8bit: true
+
+# LoRA configuration
+adapter: lora
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+
+# Dataset configuration
+datasets:
+  - path: ./genetics_training_data/medmcqa_molgen.jsonl
+    type: chat_template
+
+# Use Qwen3 chat template
+chat_template: qwen3
+
+# Reduced sequence length for memory
+sequence_len: 1024
+pad_to_sequence_len: false
+
+# Smaller batch, more accumulation
+micro_batch_size: 1
+gradient_accumulation_steps: 16
+num_epochs: 3
+
+# Optimizer settings
+optimizer: adamw_torch
+learning_rate: 2e-4
+lr_scheduler: cosine
+warmup_ratio: 0.1
+
+# Regularization
+weight_decay: 0.01
+max_grad_norm: 1.0
+
+# Output
+output_dir: ./outputs/qwen3-molgen-lora
+
+# Logging and saving
+logging_steps: 10
+save_strategy: epoch
+save_total_limit: 2
+
+# Evaluation
+val_set_size: 0.05
+eval_steps: 50
+
+# Memory optimizations
+gradient_checkpointing: true
+
+# Seed for reproducibility
+seed: 42
+
+# Dataset preprocessing
+dataset_prepared_path: ./prepared_data
