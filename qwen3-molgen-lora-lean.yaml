@@ -32,11 +32,11 @@ pad_to_sequence_len: false
 # Smaller batch, more accumulation
 micro_batch_size: 1
 gradient_accumulation_steps: 16
-num_epochs: 3
+num_epochs: 1
 
 # Optimizer settings
 optimizer: adamw_torch
-learning_rate: 2e-4
+learning_rate: 2e-5
 lr_scheduler: cosine
 warmup_ratio: 0.1
 
