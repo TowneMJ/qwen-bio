@@ -1,0 +1,5 @@
+7 multiple defensible answers, conceptually similar to better question 8
+9 accuracy issues, conceptually similar to better question 10
+13 accuracy issues, no good answer
+17 soft flag, C is best answer but G is very defensible without more context
+18 conclusion of the question is trivial from the premise, as a result C G and J are all correct

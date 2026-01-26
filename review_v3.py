@@ -1,6 +1,6 @@
 import json
 
-with open("genetics_training_data/improved_genetics_qa.jsonl", "r") as f:
+with open("genetics_training_data/v3_genetics_qa.jsonl", "r") as f:
     questions = [json.loads(line) for line in f]
 
 for i, q in enumerate(questions):
@@ -22,5 +22,5 @@ for i, q in enumerate(questions):
         break
     elif response == 'f':
         print(f"  -> Flagged question {i+1}")
-        with open("flagged_improved.txt", "a") as flag_file:
+        with open("flagged_v3.txt", "a") as flag_file:
             flag_file.write(f"{i+1}\n")
