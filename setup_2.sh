@@ -6,6 +6,7 @@ pip install --upgrade pip
 
 # Core dependencies
 pip install torch==2.9.0
+pip install torchvision
 pip install axolotl datasets accelerate
 
 # Downgrade vllm (0.14.0 has compatibility issues with axolotl)

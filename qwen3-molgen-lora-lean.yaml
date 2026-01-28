@@ -19,7 +19,7 @@ lora_target_modules:
 
 # Dataset configuration
 datasets:
-  - path: ./genetics_training_data/medmcqa_molgen.jsonl
+  - path: ./genetics_training_data/v3_genetics_chat_3.jsonl
     type: chat_template
 
 # Use Qwen3 chat template
