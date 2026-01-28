@@ -14,6 +14,9 @@ pip install vllm==0.12.0
 # Fix axolotl telemetry bug
 touch venv/lib/python3.10/site-packages/axolotl/telemetry/whitelist.yaml
 
+# Install dependencies for question generation
+pip install requests
+
 # Evaluation harness
 git clone https://github.com/EleutherAI/lm-evaluation-harness.git
 cd lm-evaluation-harness

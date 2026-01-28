@@ -16,6 +16,9 @@ import time
 import os
 from pathlib import Path
 
+# Track core concepts to avoid duplicates
+generated_concepts = []
+
 # Configuration
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "your-key-here")
 MODEL = "anthropic/claude-sonnet-4"
@@ -62,7 +65,7 @@ CRITICAL REQUIREMENTS:
    - "Which enzyme does Y?"
    - "What is the name of the process that does Z?"
    
-   DO write questions that require reasoning. The following are example question structures, though questions should not be limited to these structures:
+   DO write questions that require reasoning. The following are example question structures, though questions should be original and not simply replicate these structures:
    - "A researcher observes X. What is the most likely explanation?"
    - "If mutation Y occurred, what would be the expected effect on Z?"
    - "Which of the following scenarios would result in X?"
@@ -90,6 +93,23 @@ CRITICAL REQUIREMENTS:
    - Is there any option that could arguably be more correct?
    - Would a biology PhD agree with your answer?
    - Is this question testing reasoning, not just recall?
+
+9. CORE CONCEPT TAG: Provide a short (3-5 word) tag identifying the specific concept being tested. This is used to prevent duplicate questions, so be specific.
+
+   Examples of GOOD tags (specific):
+   - "Dom34 ribosome rescue function"
+   - "mRNA-protein level discrepancy"
+   - "telomerase reverse transcriptase mechanism"
+   - "nonsense-mediated decay triggers"
+   
+   Examples of BAD tags (too vague):
+   - "gene regulation"
+   - "translation quality control"
+   - "DNA repair mechanisms"
+   - "protein synthesis"
+
+ALREADY COVERED CONCEPTS (do not repeat these):
+{covered_concepts}
 
 Output JSON with this exact structure:
 {{
@@ -122,7 +142,13 @@ Return ONLY the JSON, no other text."""
 def generate_question(category: str, topic: str) -> dict | None:
     """Generate a single genetics question using OpenRouter."""
     
-    prompt = GENERATION_PROMPT.format(category=category, topic=topic)
+    # Format covered concepts for prompt
+    if generated_concepts:
+        covered = "\n".join(f"- {c}" for c in generated_concepts)
+    else:
+        covered = "- None yet"
+    
+    prompt = GENERATION_PROMPT.format(category=category, topic=topic, covered_concepts=covered)
     
     try:
         response = requests.post(
@@ -138,6 +164,7 @@ def generate_question(category: str, topic: str) -> dict | None:
                 ],
                 "max_tokens": 2500,
                 "temperature": 0.7,
+                "core_concept": "3-5 word specific concept tag"
             },
             timeout=90
         )
@@ -212,10 +239,13 @@ def generate_dataset(questions_per_topic: int = 2, categories: list = None):
                 
                 if question:
                     all_questions.append(question)
+                    # Track concept to avoid duplicates
+                    if "core_concept" in question:
+                        generated_concepts.append(question["core_concept"])
                     print("✓")
                 else:
                     print("✗ (failed/low confidence)")
-                
+
                 # Rate limiting
                 time.sleep(1)
     
@@ -294,7 +324,7 @@ def main():
     print(f"Starting generation (2 questions per topic, {len(TOPICS['molecular_genetics'])} topics = {2*len(TOPICS['molecular_genetics'])} questions)...")
     print("="*50)
     
-    questions = generate_dataset(questions_per_topic=2)
+    questions = generate_dataset(questions_per_topic=60)
     
     if questions:
         # Save raw Q&A format

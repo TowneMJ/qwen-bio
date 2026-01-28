@@ -1,6 +1,9 @@
 import json
+import sys
 
-with open("genetics_training_data/v3_genetics_qa.jsonl", "r") as f:
+filepath = sys.argv[1] if len(sys.argv) > 1 else "genetics_training_data/v3_genetics_qa.jsonl"
+
+with open(filepath, "r") as f:
     questions = [json.loads(line) for line in f]
 
 for i, q in enumerate(questions):
